@@ -1,0 +1,104 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                               Tank v1 EA MT5     |
+//|                                    Developer's Site: forexroboteasy.com |
+//|                                    Developed by: Forex Robot Easy Team |
+//+------------------------------------------------------------------+
+
+//+------------------------------------------------------------------+
+//|                        Global Variables                           |
+//+------------------------------------------------------------------+
+int dailyTradeCount = 0;
+datetime lastTradeTime;
+
+//+------------------------------------------------------------------+
+//|                        OnTick Event                               |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+    // Check if it is Friday
+    if (DayOfWeek(TimeCurrent()) == FRIDAY)
+        return;
+
+    // Check if a trade has already been executed today
+    if (dailyTradeCount >= 1)
+        return;
+
+    // Place pending orders
+    if (ConditionToPlaceBuyStopOrder())
+    {
+        double stopLoss = CalculateStopLoss();
+        double takeProfit = CalculateTakeProfit();
+        PlaceBuyStopOrder(stopLoss, takeProfit);
+        dailyTradeCount++;
+        lastTradeTime = TimeCurrent();
+    }
+    else if (ConditionToPlaceSellStopOrder())
+    {
+        double stopLoss = CalculateStopLoss();
+        double takeProfit = CalculateTakeProfit();
+        PlaceSellStopOrder(stopLoss, takeProfit);
+        dailyTradeCount++;
+        lastTradeTime = TimeCurrent();
+    }
+}
+
+//+------------------------------------------------------------------+
+//|                     OnTimer Event                                 |
+//+------------------------------------------------------------------+
+void OnTimer()
+{
+    // Check if it is end of the day
+    if (TimeCurrent() - lastTradeTime >= PERIOD_D1)
+    {
+        CloseAllOrders();
+        dailyTradeCount = 0;
+    }
+}
+
+//+------------------------------------------------------------------+
+//|                Functions to Manage Orders                         |
+//+------------------------------------------------------------------+
+void PlaceBuyStopOrder(double stopLoss, double takeProfit)
+{
+    // Implement logic to place a Buy Stop order
+    // with specified stop loss and take profit levels
+}
+
+void PlaceSellStopOrder(double stopLoss, double takeProfit)
+{
+    // Implement logic to place a Sell Stop order
+    // with specified stop loss and take profit levels
+}
+
+void CloseAllOrders()
+{
+    // Implement logic to close all open orders
+}
+
+//+------------------------------------------------------------------+
+//|                Helper Functions                                   |
+//+------------------------------------------------------------------+
+bool ConditionToPlaceBuyStopOrder()
+{
+    // Implement logic to determine if conditions are met to place a Buy Stop order
+    // Return true if conditions are met, otherwise return false
+}
+
+bool ConditionToPlaceSellStopOrder()
+{
+    // Implement logic to determine if conditions are met to place a Sell Stop order
+    // Return true if conditions are met, otherwise return false
+}
+
+double CalculateStopLoss()
+{
+    // Implement logic to calculate the stop loss level based on risk management rules
+    // Return the calculated stop loss level
+}
+
+double CalculateTakeProfit()
+{
+    // Implement logic to calculate the take profit level based on risk management rules
+    // Return the calculated take profit level
+}
